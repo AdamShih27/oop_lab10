@@ -21,6 +21,7 @@ class CustomLunarLander_v1(BASE_LANDER):
         '''
         # =====================type your code here=====================
         
+        
         # =============================================================
 
     def reset(
