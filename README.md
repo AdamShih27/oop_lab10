@@ -57,3 +57,6 @@ python3 play_lunarlander.py
 
 ## How to play
 Use the 'w', 'a', 'd' keys to control the main, right, and left engines, respectively, and try to land in the area between the two flags before running out of fuel.
+
+## More info
+https://www.gymlibrary.dev/environments/box2d/lunar_lander/
