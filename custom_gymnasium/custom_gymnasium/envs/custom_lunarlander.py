@@ -20,15 +20,7 @@ class CustomLunarLander_v1(BASE_LANDER):
         - Implement a custom lunar lander environment where the lander has a fuel tank of size `fuel`.
         '''
         # =====================type your code here=====================
-        super().__init__(
-             render_mode=render_mode,
-             continuous=continuous,
-             gravity=gravity,
-             enable_wind=enable_wind,
-             wind_power=wind_power,
-             turbulence_power=turbulence_power,
-         )
-        self.__total_fuel = fuel
+        
         # =============================================================
 
     def reset(
@@ -42,10 +34,7 @@ class CustomLunarLander_v1(BASE_LANDER):
         - Reset the fuel tank to its original size.
         '''
         # =====================type your code here=====================
-        self.__fuel = self.__total_fuel
-        return super().reset(
-                         seed=seed,
-                         options=options)
+        
         # =============================================================
         
     def step(self, action):
@@ -59,11 +48,5 @@ class CustomLunarLander_v1(BASE_LANDER):
         - If the lander doesn't move, the fuel tank should remain the same.
         '''
         # =====================type your code here=====================
-        if self.__fuel <= 0:
-             action = 0
-        else:
-             if action > 0:
-                 self.__fuel -= 1
-        obs, reward, terminated, truncation, info = super().step(action=action)
-        return obs, reward, terminated, truncation, info
+        
         # =============================================================
