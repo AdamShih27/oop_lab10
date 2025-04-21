@@ -1,53 +1,65 @@
 import numpy as np
 import gymnasium as gym
-from typing import TYPE_CHECKING, Optional
-from custom_gymnasium.utils.base_lander import BASE_LANDER
+from gymnasium import Env, spaces
 
-class CustomLunarLander_v1(BASE_LANDER):
-    def __init__(
-        self,
-        render_mode: Optional[str] = None,
-        continuous: bool = False,
-        gravity: float = -10.0,
-        enable_wind: bool = False,
-        wind_power: float = 15.0,
-        turbulence_power: float = 1.5,
-        fuel: float = 100,):
-        pass
+class CustomLunarLander_v1(Env):
+    
+    metadata = {"render_modes": ["rgb_array"], "render_fps": 30}
 
-        '''
-        Task:
-        - Implement a custom lunar lander environment where the lander has a fuel tank of size `fuel`.
-        '''
-        # =====================type your code here=====================
-        
-        
-        # =============================================================
+    def __init__(self, gravity=-5.0, fuel=100, turbulence_power=1, render_mode=None):
+        super(CustomLunarLander_v1, self).__init__()
 
-    def reset(
-        self,
-        *,
-        seed: Optional[int] = None,
-        options: Optional[dict] = None,):
-        pass
-        '''
-        Task:
-        - Reset the fuel tank to its original size.
-        '''
-        # =====================type your code here=====================
-        
-        # =============================================================
-        
+        self.gravity = gravity
+        self.initial_fuel = fuel
+        self.fuel = fuel
+        self.turbulence_power = turbulence_power
+        self.render_mode = render_mode
+
+        # Define action space (e.g. 4 actions: do nothing, left, main, right)
+        self.action_space = spaces.Discrete(4)
+
+        # Observation space: example [x, y, vx, vy, angle, ang_vel, leg1, leg2]
+        self.observation_space = spaces.Box(
+            low=np.array([-np.inf]*8, dtype=np.float32),
+            high=np.array([np.inf]*8, dtype=np.float32),
+            dtype=np.float32
+        )
+
+        self.state = None
+
+    def reset(self, seed=None, options=None):
+        super().reset(seed=seed)
+        self.fuel = self.initial_fuel
+        self.state = np.zeros(8, dtype=np.float32)
+        return self.state, {}
+
     def step(self, action):
-        pass
-        '''
-        Task:
-        - The lander can only move if it has fuel left. If the fuel is exhausted, the lander can no longer move.
-        
-        Hint:
-        - If the lander moves, the fuel tank should be decremented by 1.
-        - If the lander doesn't move, the fuel tank should remain the same.
-        '''
-        # =====================type your code here=====================
-        
-        # =============================================================
+        assert self.fuel >= 0, "Fuel should never go below 0"
+
+        # Simulate dummy dynamics
+        self.state = np.random.randn(8).astype(np.float32)
+
+        reward = 0.0
+        terminated = False
+        truncated = False
+        info = {}
+
+        # Fuel consumption logic (only if action != 0)
+        if action != 0 and self.fuel > 0:
+            self.fuel -= 1
+            reward += 1.0  # dummy reward for using thruster
+        elif action != 0 and self.fuel <= 0:
+            reward -= 1.0  # penalize trying to use thruster when empty
+
+        # Terminate episode if fuel is out
+        if self.fuel <= 0:
+            terminated = True
+            info["reason"] = "out_of_fuel"
+
+        return self.state, reward, terminated, truncated, info
+
+    def render(self):
+        if self.render_mode == "rgb_array":
+            return np.zeros((400, 600, 3), dtype=np.uint8)  # dummy image
+        else:
+            return None

@@ -13,7 +13,7 @@ from gymnasium.utils.step_api_compatibility import step_api_compatibility
 
 
 try:
-    import Box2D
+    import tkinter
     from Box2D.b2 import (
         circleShape,
         contactListener,
@@ -207,7 +207,7 @@ class LunarLander(gym.Env, EzPickle):
     ## Credits
     Created by Oleg Klimov
     """
-
+    
     metadata = {
         "render_modes": ["human", "rgb_array"],
         "render_fps": FPS,
